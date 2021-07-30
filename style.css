@@ -6,50 +6,88 @@
   src: url('Fonts/Mayeka/MayekaThinDemo-w5VZ.ttf');
 }
 
+@font-face {
+  font-family: 'Mayeka';
+  font-style: normal;
+  font-weight: 900;
+  src: url('Fonts/Mayeka/MayekaBoldDemo-M8zr.ttf');
+}
+
 html {
+  font-family: 'Mayeka';
   margin: 0;
   padding: 0;
+  background-color: hsl(0, 0%, 90%);
 }
 
 body {
-  width: 90vw;
+  width: 80vw;
   max-width: 600px;
   margin: auto;
   padding: none;
 }
 
+#scoreboard {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin:  5vw auto 1vw auto;
+}
+
 #gameboard {
   display: grid;
-  font-family: 'Mayeka';
-  color: black;
-  border-radius: 50px;
+  overflow: hidden;
+  font-weight: 100;
   width: 100%;
-  height: 90vw;
+  height: 80vw;
   max-height: 600px;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: 0.3vw;
+  background-color: hsl(0, 0%, 10%);
+  box-shadow: 
+    inset 7vw 7vw 6vw hsl(0, 0%, 90%),
+    inset -7vw -7vw 6vw hsl(0, 0%, 90%);
 }
 
 .cell {
   display: grid;
   justify-content: center;
   align-items: center;
-}
-
-.cell > * {
-  font-size: 10vw;
+  color: hsl(0, 0%, 30%);
+  background-color: hsl(0, 0%, 90%);
+  font-size: 15vw;
   line-height: 0;
+  transition: 
+    background-color 0.1s,
+    box-shadow 0.3s;
 }
 
-#c00,     #c02,
-     #c11,
-#c20,     #c22 {
-  background-color: hsl(0, 0%, 60%);
+.cell:hover {
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 
+    inset 6vw 6vw 7vw hsl(0, 0%, 90%),
+    inset -6vw -6vw 7vw hsl(0, 0%, 90%);
+  transition: 
+    background-color 0.3s,
+    box-shadow 0.1s;
 }
 
-     #c01,
-#c10,     #c12,
-     #c21      {
-  background-color: hsl(0, 0%, 80%);
+@media (min-width: 750px) {
+  .cell > * {
+    font-size: 112.5px;
+  }
+  .cell:hover {
+    background-color: hsl(0, 0%, 100%);
+    box-shadow: 
+      inset 45px 45px 52.5px hsl(0, 0%, 90%),
+      inset -45px -45px 52.5px hsl(0, 0%, 90%);
+    transition: 
+      background-color 0.3s,
+      box-shadow 0.1s;
+  }
+  #gameboard {
+    gap: 2.25px;
+  }
 }
 
 @media (min-width: 400px) {
