@@ -1,4 +1,57 @@
 /* Larger than mobile */
+@font-face {
+  font-family: 'Mayeka';
+  font-style: normal;
+  font-weight: 100;
+  src: url('Fonts/Mayeka/MayekaThinDemo-w5VZ.ttf');
+}
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 90vw;
+  max-width: 600px;
+  margin: auto;
+  padding: none;
+}
+
+#gameboard {
+  display: grid;
+  font-family: 'Mayeka';
+  color: black;
+  border-radius: 50px;
+  width: 100%;
+  height: 90vw;
+  max-height: 600px;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+.cell {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.cell > * {
+  font-size: 10vw;
+  line-height: 0;
+}
+
+#c00,     #c02,
+     #c11,
+#c20,     #c22 {
+  background-color: hsl(0, 0%, 60%);
+}
+
+     #c01,
+#c10,     #c12,
+     #c21      {
+  background-color: hsl(0, 0%, 80%);
+}
+
 @media (min-width: 400px) {
 
 }
