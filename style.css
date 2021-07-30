@@ -65,8 +65,8 @@ body {
 .cell:hover {
   background-color: hsl(0, 0%, 100%);
   box-shadow: 
-    inset 7vw 7vw 6vw hsl(0, 0%, 90%),
-    inset -7vw -7vw 6vw hsl(0, 0%, 90%);
+    inset 8vw 8vw 6vw hsl(0, 0%, 90%),
+    inset -8vw -8vw 6vw hsl(0, 0%, 90%);
   transition: 
     background-color 0.3s,
     box-shadow 0.1s;
@@ -79,8 +79,8 @@ body {
   .cell:hover {
     background-color: hsl(0, 0%, 100%);
     box-shadow: 
-      inset 52.5px 52.5px 45px hsl(0, 0%, 90%),
-      inset -52.5px -52.5px 45px hsl(0, 0%, 90%);
+      inset 60px 60px 45px hsl(0, 0%, 90%),
+      inset -60px -60px 45px hsl(0, 0%, 90%);
     transition: 
       background-color 0.3s,
       box-shadow 0.1s;
