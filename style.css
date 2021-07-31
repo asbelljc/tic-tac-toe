@@ -9,8 +9,8 @@
 @font-face {
   font-family: 'Mayeka';
   font-style: normal;
-  font-weight: 900;
-  src: url('Fonts/Mayeka/MayekaBoldDemo-M8zr.ttf');
+  font-weight: 500;
+  src: url('Fonts/Mayeka/MayekaRegularDemo-v5VO.ttf');
 }
 
 html {
@@ -32,6 +32,22 @@ body {
   justify-content: space-between;
   width: 90%;
   margin:  5vw auto 1vw auto;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.score {
+  font-size: 40px;
+  font-weight: 100;
 }
 
 #gameboard {
