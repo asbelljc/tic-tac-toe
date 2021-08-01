@@ -57,7 +57,7 @@ body {
   height: 80vw;
   max-height: 600px;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-  gap: 0.3vw;
+  gap: 2px;
   background-color: hsl(0, 0%, 10%);
   box-shadow: 
     inset 7vw 7vw 6vw hsl(0, 0%, 90%),
@@ -103,9 +103,6 @@ body {
         background-color 0.4s,
         box-shadow 0.2s;
     }
-  }
-  #gameboard {
-    gap: 2.25px;
   }
 }
 

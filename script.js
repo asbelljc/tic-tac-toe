@@ -1,8 +1,9 @@
 const gameboard = (() => {
   let _board = [ [], [], [] ];
-  let _token = // figure out how to make this X for player / O for CPU
+  let _token = "#"; // figure out how to make this X for player / O for CPU
   const _declareResult = () => {
     // something...
+    console.log("test");
   };
   const _checkColumns = () => {
     _board.every(row => {
