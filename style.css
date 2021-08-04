@@ -30,8 +30,8 @@ body {
 #scoreboard {
   display: flex;
   justify-content: space-between;
-  width: 90%;
-  margin:  5vw auto 1vw auto;
+  width: 100%;
+  margin:  5vw auto 3vw auto;
 }
 
 .player {
@@ -47,6 +47,30 @@ body {
 
 .score {
   font-size: 40px;
+  font-weight: 100;
+}
+
+.message-box {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(.36,1.5,.76,.9);
+}
+/* remove and the box zoom-appears, add and it vanishes instantly */
+.hidden {
+  transition: none;
+  transform: scale(0);
+}
+
+#round-result {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+#continue {
+  font-size: 16px;
   font-weight: 100;
 }
 
@@ -99,6 +123,13 @@ body {
   .cell {
     font-size: 112.5px;
   }
+
+  #gameboard {
+    box-shadow: 
+      inset 52.5px 52.5px 45px hsl(0, 0%, 90%),
+      inset -52.5px -52.5px 45px hsl(0, 0%, 90%);
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .cell:hover {
       background-color: hsl(0, 0%, 100%);
@@ -112,22 +143,8 @@ body {
   }
 }
 
-@media (min-width: 400px) {
-
-}
-/* Larger than phablet */
-@media (min-width: 550px) {
-
-}
-/* Larger than tablet */
-@media (min-width: 750px) {
-
-}
-/* Larger than desktop */
 @media (min-width: 1000px) {
-
-}
-/* Larger than HD desktop */
-@media (min-width: 1200px) {
-
+  #scoreboard {
+    margin:  50px auto 30px auto;
+  }
 }
