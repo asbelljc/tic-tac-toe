@@ -1,33 +1,100 @@
-const gameboard = (() => {
-  // placeholders keep rows of 'undefined' from 'winning' and simplify code
-  let _board = [ [1,2,3], [4,5,6], [7,8,9] ];
-  let _token = "#"; // figure out how to make this X for player / O for CPU
-  const _declareResult = () => {
-    // something...
-    console.log("test");
-  };
-  const _checkColumns = () => { // this doesn't work
-    return _board.every(row => {
-      return row[0] === "X" || row[1] === "X" || row[2] === "x" ||
-             row[0] === "O" || row[1] === "O" || row[2] === "O"
-    });
-  }
-  const _checkRows = () => { // this doesn't work
-    return _board.some(row => row[0] === row[1] && row[1] === row[2]);
-  }
-  const _checkDiagonals = () => { // this seems to work now but looks... clunky
-    return ((_board[0][0] === _board[1][1]) && (_board[1][1] === _board[2][2])) ||
-           ((_board[0][2] === _board[1][1]) && (_board[1][1] === _board[2][0]))
-  }
-  const _checkForEnd = () => {
-    if (_checkColumns() || _checkRows() || _checkDiagonals) {
-      _declareResult();
+let gameboard;
+
+const displayController = (() => {
+  const _humanScore = document.querySelector("#human .score");
+  const _cpuScore = document.querySelector("computer .score");
+  const _squares = document.querySelectorAll(".cell");
+  const _board = document.querySelector("#gameboard");
+
+  const renderCurrentBoard = () => {
+    let currentBoard = gameboard.getBoard();
+    for (let i=0; i<_squares.length; i++) {
+      if (typeof currentBoard[i] === "number") {
+        _squares[i].innerText = "";
+      } else {
+        _squares[i].innerText = currentBoard[i];
+      }
     }
-  }
-  const play = (x, y) => {
-    _board[x][y] = _token;
-    _checkForEnd();
   };
 
-  return { _board, _checkForEnd, _checkColumns, _checkRows, _checkDiagonals, play };
+  _board.addEventListener("click", () => {
+    console.log("[working code]");
+  });
+  
+  return {
+    renderCurrentBoard
+  }
 })();
+
+///////////////////////////////////////////////////////////////////////////////
+
+gameboard = (() => {
+  // placeholders keep rows of 'undefined' from 'winning' and simplify code
+  let _board = [0,1,2,3,4,5,6,7,8];
+
+  const getBoard = () => _board;
+
+  const getEmptySquares = () => { //
+    let emptySquares = [];
+    _board.forEach(square => {
+      if (typeof square === "number") {
+        emptySquares.push(square);
+      }
+    });
+    return emptySquares;
+  };
+
+  const _checkForEnd = () => {
+    if (
+      _board[0] === _board[1] && _board[1] === _board[2] || // rows
+      _board[3] === _board[4] && _board[4] === _board[5] || // .
+      _board[6] === _board[7] && _board[7] === _board[8] || // .
+      _board[0] === _board[3] && _board[3] === _board[6] || // columns
+      _board[1] === _board[4] && _board[4] === _board[7] || // .
+      _board[2] === _board[5] && _board[5] === _board[8] || // .
+      _board[0] === _board[4] && _board[4] === _board[8] || // diagonals
+      _board[2] === _board[4] && _board[4] === _board[6]    // .
+    ) { console.log("[working code]") }
+  };
+
+  // const placeToken = () => {
+
+  // };
+
+  return {
+    getBoard,
+    getEmptySquares,
+    // placeToken
+  };
+})();
+
+///////////////////////////////////////////////////////////////////////////////
+
+const Player = (brain) => {
+  const _token = ((playerBrain) => {
+    return playerBrain === "computer" ? "O" : "X" ;
+  })(brain);
+
+  const getToken = () => _token;
+
+  // const play = (field) => {
+  //   // Call gameboard.getFields()
+  //   // Get the corresponding divs and apply click listeners
+  //   // On click, gameboard.setField()
+  //   // Remove click listeners
+  // };
+
+  return {getToken};
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+// const game = (() => {
+//   const _reset = () => {
+//     // clear gameboard and await "X" player (human)
+//   };
+
+//   const nextTurn = () => {
+    
+//   };
+// })();
