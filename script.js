@@ -1,10 +1,9 @@
 let gameboard;
 
 const displayController = (() => {
-  const _humanScore = document.querySelector("#human .score");
-  const _cpuScore = document.querySelector("computer .score");
-  const _squares = document.querySelectorAll(".cell");
-  const _board = document.querySelector("#gameboard");
+  const humanScore = document.querySelector("#human .score");
+  const cpuScore = document.querySelector("computer .score");
+  const squares = document.querySelectorAll(".cell");
 
   const renderCurrentBoard = () => {
     let currentBoard = gameboard.getBoard();
@@ -16,14 +15,7 @@ const displayController = (() => {
       }
     }
   };
-
-  _board.addEventListener("click", () => {
-    console.log("[working code]");
-  });
   
-  return {
-    renderCurrentBoard
-  }
 })();
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,15 +26,7 @@ gameboard = (() => {
 
   const getBoard = () => _board;
 
-  const getEmptySquares = () => { //
-    let emptySquares = [];
-    _board.forEach(square => {
-      if (typeof square === "number") {
-        emptySquares.push(square);
-      }
-    });
-    return emptySquares;
-  };
+  
 
   const _checkForEnd = () => {
     if (
@@ -57,35 +41,31 @@ gameboard = (() => {
     ) { console.log("[working code]") }
   };
 
-  // const placeToken = () => {
-
-  // };
-
   return {
     getBoard,
     getEmptySquares,
-    // placeToken
+    placeToken
   };
 })();
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const Player = (brain) => {
-  const _token = ((playerBrain) => {
-    return playerBrain === "computer" ? "O" : "X" ;
-  })(brain);
+const Player = (name, difficulty) => {
+  let score = 0;
+  const getScore = () => score;
+  const getName = () => name;
+  const getDifficulty = () => difficulty;
+  const win = () => score++;
+  const resetScore = () => score = 0;
 
-  const getToken = () => _token;
-
-  // const play = (field) => {
-  //   // Call gameboard.getFields()
-  //   // Get the corresponding divs and apply click listeners
-  //   // On click, gameboard.setField()
-  //   // Remove click listeners
-  // };
-
-  return {getToken};
-}
+  return {
+    getScore,
+    getName,
+    getDifficulty,
+    win,
+    resetScore
+  }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
