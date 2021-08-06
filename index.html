@@ -10,19 +10,19 @@
 <body>
   <div id="scoreboard">
     <div id="human" class="player">
-      <div class="name">YOU</div>
+      <div class="name">Player 1</div>
       <div class="score">0</div>
     </div>
-    <div class="message-box hidden">
-      <div id="round-result">YOU WIN</div>
-      <div id="continue">click to continue</div>
-    </div>
     <div id="computer" class="player">
-      <div class="name">CPU</div>
+      <div class="name">Player 2</div>
       <div class="score">0</div>
     </div>
   </div>
-  <div id="gameboard">
+  <div class="message-box hidden">
+    <div id="round-result">MICHELANGELO WINS</div>
+    <div id="continue-msg">click/tap to continue</div>
+  </div>
+  <div class="gameboard">
     <div id="0" class="cell"></div>
     <div id="1" class="cell"></div>
     <div id="2" class="cell"></div>
@@ -33,11 +33,11 @@
     <div id="7" class="cell"></div>
     <div id="8" class="cell"></div>
   </div>
-  <div id="start-menu">
+  <div class="start-menu hidden">
     <button id="one-player">1 player</button>
     <button id="two-player">2 player</button>
   </div>
-  <div id="one-player-menu">
+  <div class="one-player-menu hidden">
     <input type="text" class="name-input" placeholder="Player">
     <div id="difficulty">
       <span class="slider"></span>
@@ -47,7 +47,7 @@
     </div>
     <button type="button" class="start">Start</button>
   </div>
-  <div id="two-player-menu">
+  <div class="two-player-menu hidden">
       <input type="text" class="name-input" placeholder="Player 1">
       <input type="text" class="name-input" placeholder="Player 2">
       <button type="button" class="start">Start</button>

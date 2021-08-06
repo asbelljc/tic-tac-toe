@@ -31,7 +31,8 @@ body {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin:  5vw auto 3vw auto;
+  margin-top: 5vw;
+  /* margin:  5vw auto 3vw auto; */
 }
 
 .player {
@@ -51,12 +52,21 @@ body {
 }
 
 .message-box {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
+  margin: 1vw 0;
+  will-change: transform;
   transition: transform 0.3s cubic-bezier(.36,1.5,.76,.9);
+}
+
+#round-result {
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
+}
+
+#continue-msg {
+  font-size: 16px;
+  font-weight: 100;
+  text-align: center;
 }
 /* remove and the box zoom-appears, add and it vanishes instantly */
 .hidden {
@@ -64,17 +74,7 @@ body {
   transform: scale(0);
 }
 
-#round-result {
-  font-size: 24px;
-  font-weight: 500;
-}
-
-#continue {
-  font-size: 16px;
-  font-weight: 100;
-}
-
-#gameboard {
+.gameboard {
   display: grid;
   font-weight: 100;
   width: 100%;
@@ -124,7 +124,7 @@ body {
     font-size: 112.5px;
   }
 
-  #gameboard {
+  .gameboard {
     box-shadow: 
       inset 52.5px 52.5px 45px hsl(0, 0%, 90%),
       inset -52.5px -52.5px 45px hsl(0, 0%, 90%);
@@ -145,6 +145,6 @@ body {
 
 @media (min-width: 1000px) {
   #scoreboard {
-    margin:  50px auto 30px auto;
+    margin-top: 50px;
   }
 }
