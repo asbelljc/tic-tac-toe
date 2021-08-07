@@ -68,6 +68,20 @@ const Player = (name, difficulty) => {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+
+// const game = (() => {
+//   const _reset = () => {
+//     // clear gameboard and await "X" player (human)
+//   };
+
+//   const nextTurn = () => {
+    
+//   };
+// })();
+
+///////////////////////////////////////////////////////////////////////////////
+// TESTING
+// tests slider motion on difficulty selection - it works!
 function test(level) {
   const slider = document.getElementsByClassName("slider")[0];
   if (slider.classList.contains("easy")) {
@@ -81,13 +95,3 @@ function test(level) {
     slider.classList.add(level);
   }
 }
-
-// const game = (() => {
-//   const _reset = () => {
-//     // clear gameboard and await "X" player (human)
-//   };
-
-//   const nextTurn = () => {
-    
-//   };
-// })();
