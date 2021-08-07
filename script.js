@@ -68,6 +68,19 @@ const Player = (name, difficulty) => {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+function test(level) {
+  const slider = document.getElementsByClassName("slider")[0];
+  if (slider.classList.contains("easy")) {
+    slider.classList.remove("easy");
+    slider.classList.add(level);
+  } else if (slider.classList.contains("medium")) {
+    slider.classList.remove("medium");
+    slider.classList.add(level);
+  } else if (slider.classList.contains("hard")) {
+    slider.classList.remove("hard");
+    slider.classList.add(level);
+  }
+}
 
 // const game = (() => {
 //   const _reset = () => {

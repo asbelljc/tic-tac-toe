@@ -9,18 +9,19 @@
 </head>
 <body>
   <div class="scoreboard">
-    <div class="player">
-      <div class="name">Player 1</div>
+    <div class="player" id="player-one">
+      <div class="name">Michelangelo</div>
       <div class="score">0</div>
     </div>
-    <div class="player">
-      <div class="name">Player 2</div>
+    <div class="message-box">
+      <div id="round-result">MICHELANGELO WINS</div>
+      <div class="continue-msg click-to">click to continue</div>
+      <div class="continue-msg tap-to">tap to continue</div>
+    </div>
+    <div class="player" id="player-two">
+      <div class="name">Michelangelo</div>
       <div class="score">0</div>
     </div>
-  </div>
-  <div class="message-box hidden">
-    <div id="round-result">MICHELANGELO WINS</div>
-    <div id="continue-msg">click/tap to continue</div>
   </div>
   <div class="gameboard" style="display: none;">
     <div id="0" class="cell"></div>
@@ -34,24 +35,24 @@
     <div id="8" class="cell"></div>
   </div>
   <button type="button" id="new-game">new game</button>
-  <div class="start-menu">
+  <div class="menu" style="display: none;">
     <button class="player-count">1 player</button>
     <button class="player-count">2 player</button>
   </div>
-  <div class="one-player-menu hidden">
-    <input type="text" class="name-input" placeholder="Player">
+  <div class="menu">
+    <input type="text" class="name-input" maxlength="12" placeholder="Player">
     <div id="difficulty">
-      <span class="slider"></span>
-      <span class="level">easy</span>
-      <span class="level">medium</span>
-      <span class="level">hard</span>
+      <span class="slider medium"></span>
+      <div class="level">easy</div>
+      <div class="level">medium</div>
+      <div class="level">hard</div>
     </div>
-    <button type="button" class="start">Start</button>
+    <button type="button" class="start">start</button>
   </div>
-  <div class="two-player-menu hidden">
-      <input type="text" class="name-input" placeholder="Player 1">
-      <input type="text" class="name-input" placeholder="Player 2">
-      <button type="button" class="start">Start</button>
+  <div class="menu hidden">
+      <input type="text" class="name-input" maxlength="12" placeholder="Player 1">
+      <input type="text" class="name-input" maxlength="12" placeholder="Player 2">
+      <button type="button" class="start">start</button>
   </div>
 </body>
 </html>
