@@ -43,8 +43,8 @@ gameboard = (() => {
 
   return {
     getBoard,
-    getEmptySquares,
-    placeToken
+    // getEmptySquares,
+    // placeToken
   };
 })();
 
@@ -80,18 +80,17 @@ const Player = (name, difficulty) => {
 // })();
 
 ///////////////////////////////////////////////////////////////////////////////
-// TESTING
-// tests slider motion on difficulty selection - it works!
-function test(level) {
-  const slider = document.getElementsByClassName("slider")[0];
-  if (slider.classList.contains("easy")) {
-    slider.classList.remove("easy");
-    slider.classList.add(level);
-  } else if (slider.classList.contains("medium")) {
-    slider.classList.remove("medium");
-    slider.classList.add(level);
-  } else if (slider.classList.contains("hard")) {
-    slider.classList.remove("hard");
-    slider.classList.add(level);
-  }
+// WORKING CODE - to be organized
+
+const levels = Array.from(document.getElementsByClassName("level"));
+levels.forEach(button => {
+  button.addEventListener("click", e => {
+    moveSlider(e);
+    // chooseDifficulty();
+  });
+});
+
+function moveSlider(e) {
+  const slider = document.getElementById("slider");
+  slider.className = `slider ${e.target.innerText}`;
 }

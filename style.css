@@ -50,7 +50,7 @@ button:focus:not(:focus-visible) {
   outline: none;
 }
 
-#new-game {
+.new-game {
   display: block;
   position: fixed;
   bottom: 5vw;
@@ -89,6 +89,8 @@ button:focus:not(:focus-visible) {
   align-items: center;
   width: 100%;
   margin-top: 5vw;
+  will-change: transform;
+  transition: transform 0.3s cubic-bezier(.36,1.5,.76,.9);
 }
 
 .player {
@@ -173,12 +175,6 @@ button:focus:not(:focus-visible) {
 
 .level:hover {
   cursor: pointer;
-}
-
-/* remove and the box zoom-appears, add and it vanishes instantly */
-.hidden {
-  transition: none;
-  transform: scale(0);
 }
 
 .gameboard {
@@ -291,7 +287,19 @@ input[type=text] {
     margin-top: 50px;
   }
 
-  #new-game {
+  .new-game {
     bottom: 50px;
   }
+}
+
+/* remove and the box zoom-appears, add and it vanishes instantly;
+   for scoreboard and message-box */
+.empty {
+  transition: none;
+  transform: scale(0);
+}
+
+/* effectively removes menus and buttons as needed */
+.hidden {
+  display: none;
 }

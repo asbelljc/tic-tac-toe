@@ -8,12 +8,12 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="scoreboard">
+  <div class="scoreboard empty" id="scoreboard">
     <div class="player" id="player-one">
       <div class="name">Michelangelo</div>
       <div class="score">0</div>
     </div>
-    <div class="message-box">
+    <div class="message-box empty" id="message-box">
       <div id="round-result">MICHELANGELO WINS</div>
       <div class="continue-msg click-to">click to continue</div>
       <div class="continue-msg tap-to">tap to continue</div>
@@ -23,7 +23,7 @@
       <div class="score">0</div>
     </div>
   </div>
-  <div class="gameboard" style="display: none;">
+  <div class="gameboard hidden" id="gameboard">
     <div id="0" class="cell"></div>
     <div id="1" class="cell"></div>
     <div id="2" class="cell"></div>
@@ -34,22 +34,22 @@
     <div id="7" class="cell"></div>
     <div id="8" class="cell"></div>
   </div>
-  <button type="button" id="new-game">new game</button>
-  <div class="menu" style="display: none;">
+  <button type="button" class="new-game hidden" id="new-game">new game</button>
+  <div class="menu hidden" id="start-menu">
     <button class="player-count">1 player</button>
     <button class="player-count">2 player</button>
   </div>
-  <div class="menu">
+  <div class="menu" id="one-player-menu">
     <input type="text" class="name-input" maxlength="12" placeholder="Player">
     <div id="difficulty">
-      <span class="slider medium"></span>
+      <span class="slider medium" id="slider"></span>
       <div class="level">easy</div>
       <div class="level">medium</div>
       <div class="level">hard</div>
     </div>
     <button type="button" class="start">start</button>
   </div>
-  <div class="menu"  style="display: none">
+  <div class="menu hidden" id="two-player-menu">
       <input type="text" class="name-input" maxlength="12" placeholder="Player 1">
       <input type="text" class="name-input" maxlength="12" placeholder="Player 2">
       <button type="button" class="start">start</button>
