@@ -1,54 +1,4 @@
-let gameboard;
-
-const displayController = (() => {
-  const humanScore = document.querySelector("#human .score");
-  const cpuScore = document.querySelector("computer .score");
-  const squares = document.querySelectorAll(".cell");
-
-  const renderCurrentBoard = () => {
-    let currentBoard = gameboard.getBoard();
-    for (let i=0; i<_squares.length; i++) {
-      if (typeof currentBoard[i] === "number") {
-        _squares[i].innerText = "";
-      } else {
-        _squares[i].innerText = currentBoard[i];
-      }
-    }
-  };
-  
-})();
-
-///////////////////////////////////////////////////////////////////////////////
-
-gameboard = (() => {
-  // placeholders keep rows of 'undefined' from 'winning' and simplify code
-  let _board = [0,1,2,3,4,5,6,7,8];
-
-  const getBoard = () => _board;
-
-  
-
-  const _checkForEnd = () => {
-    if (
-      _board[0] === _board[1] && _board[1] === _board[2] || // rows
-      _board[3] === _board[4] && _board[4] === _board[5] || // .
-      _board[6] === _board[7] && _board[7] === _board[8] || // .
-      _board[0] === _board[3] && _board[3] === _board[6] || // columns
-      _board[1] === _board[4] && _board[4] === _board[7] || // .
-      _board[2] === _board[5] && _board[5] === _board[8] || // .
-      _board[0] === _board[4] && _board[4] === _board[8] || // diagonals
-      _board[2] === _board[4] && _board[4] === _board[6]    // .
-    ) { console.log("[working code]") }
-  };
-
-  return {
-    getBoard,
-    // getEmptySquares,
-    // placeToken
-  };
-})();
-
-///////////////////////////////////////////////////////////////////////////////
+let game;
 
 const Player = (name, difficulty) => {
   let score = 0;
@@ -56,41 +6,89 @@ const Player = (name, difficulty) => {
   const getName = () => name;
   const getDifficulty = () => difficulty;
   const win = () => score++;
-  const resetScore = () => score = 0;
 
   return {
     getScore,
     getName,
     getDifficulty,
-    win,
-    resetScore
+    win
   }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-// const game = (() => {
-//   const _reset = () => {
-//     // clear gameboard and await "X" player (human)
-//   };
+const display = (() => {
+  // menus
+  const startMenu = document.getElementById("start-menu");
+  const onePlayerMenu = document.getElementById("one-player-menu");
+    const slider = document.getElementById("slider");
+  const twoPlayerMenu = document.getElementById("two-player-menu");
+  // scoreboard
+  const scoreboard = document.getElementById("scoreboard");
+    const playerOneName = document.querySelector("#player-one .name");
+      const playerOneScore = document.querySelector("#player-one .score");
+    const playerTwoName = document.querySelector("#player-two .name");
+      const playerTwoScore = document.querySelector("#player-two .score");
+    const messageBox = document.getElementById("message-box");
+      const message = document.getElementById("message");
+  // gameboard
+  const gameboard = document.getElementById("gameboard");
+    const squares = document.getElementsByClassName("cell");
+  // new game button
+  const newGameBtn = document.getElementById("new-game");
 
-//   const nextTurn = () => {
-    
-//   };
-// })();
+  const renderCurrentBoard = () => {
+    let currentBoard = game.getBoard();
+    for (let i=0; i<squares.length; i++) {
+      if (typeof currentBoard[i] === "number") {
+        squares[i].innerText = "";
+      } else {
+        squares[i].innerText = currentBoard[i];
+      }
+    }
+  };
+
+  function moveSlider(e) {
+    slider.className = `slider ${e.target.innerText}`;
+  }
+
+  return {
+    moveSlider
+  }
+})();
 
 ///////////////////////////////////////////////////////////////////////////////
-// WORKING CODE - to be organized
 
-const levels = Array.from(document.getElementsByClassName("level"));
-levels.forEach(button => {
-  button.addEventListener("click", e => {
-    moveSlider(e);
-    // chooseDifficulty();
+game = (() => {
+  // placeholders keep rows of 'undefined' from 'winning' and simplify code
+  let board = [0,1,2,3,4,5,6,7,8];
+
+  const getBoard = () => board;
+
+  
+
+  const _checkForEnd = () => {
+    if (
+      board[0] === board[1] && board[1] === board[2] || // rows
+      board[3] === board[4] && board[4] === board[5] || // .
+      board[6] === board[7] && board[7] === board[8] || // .
+      board[0] === board[3] && board[3] === board[6] || // columns
+      board[1] === board[4] && board[4] === board[7] || // .
+      board[2] === board[5] && board[5] === board[8] || // .
+      board[0] === board[4] && board[4] === board[8] || // diagonals
+      board[2] === board[4] && board[4] === board[6]    // .
+    ) { console.log("[working code]") }
+  };
+
+  const levels = Array.from(document.getElementsByClassName("level"));
+  levels.forEach(button => {
+    button.addEventListener("click", e => {
+      display.moveSlider(e);
+      // setDifficulty();
+    });
   });
-});
 
-function moveSlider(e) {
-  const slider = document.getElementById("slider");
-  slider.className = `slider ${e.target.innerText}`;
-}
+  return {
+    getBoard
+  };
+})();

@@ -38,12 +38,30 @@ button {
     color 0.2s,
     border 0.2s;
 }
-/* might need to put this in that sticky-hover media query later... */
-button:hover {
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
-  border: 0.1px solid transparent;
-  cursor: pointer;
+
+@media (hover: hover) and (pointer: fine) {
+  button:hover:not(.level) {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: 0.1px solid transparent;
+    cursor: pointer;
+  }
+  .level:hover {
+    cursor: pointer;
+  }
+  .cell:hover {
+    background-color: hsl(0, 0%, 100%);
+    box-shadow: 
+      inset 8vw 8vw 6vw hsl(0, 0%, 90%),
+      inset -8vw -8vw 6vw hsl(0, 0%, 90%);
+    transition: 
+      background-color 0.4s,
+      box-shadow 0.2s;
+  }
+}
+
+button:active:not(.level) {
+  background: rgba(0, 0, 0, 0.6);
 }
 
 button:focus:not(:focus-visible) {
@@ -69,6 +87,14 @@ button:focus:not(:focus-visible) {
   font-size: 16px;
   height: 35px;
   width: 150px;
+}
+
+.level {
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  width: calc(100%/3);
 }
 
 .player-count {
@@ -125,7 +151,7 @@ button:focus:not(:focus-visible) {
   text-align: center;
 }
 
-#round-result {
+#message {
   font-size: 24px;
   font-weight: 500;
 }
@@ -164,17 +190,6 @@ button:focus:not(:focus-visible) {
 
 .hard {
   left: calc(100%*2/3);
-}
-
-.level {
-  font-size: 13px;
-  font-weight: 500;
-  text-align: center;
-  width: calc(100%/3);
-}
-
-.level:hover {
-  cursor: pointer;
 }
 
 .gameboard {
@@ -230,18 +245,6 @@ input[type=text] {
   border-bottom: 1px solid black;
   background: transparent;
   outline: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .cell:hover {
-    background-color: hsl(0, 0%, 100%);
-    box-shadow: 
-      inset 8vw 8vw 6vw hsl(0, 0%, 90%),
-      inset -8vw -8vw 6vw hsl(0, 0%, 90%);
-    transition: 
-      background-color 0.4s,
-      box-shadow 0.2s;
-  }
 }
 
 @media (max-width: 749px) {
