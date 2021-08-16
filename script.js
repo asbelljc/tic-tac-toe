@@ -33,7 +33,7 @@ const display = (() => {
       const message = document.getElementById("message");
   // gameboard
   const gameboard = document.getElementById("gameboard");
-    const squares = document.getElementsByClassName("cell");
+    const squares = document.getElementsByClassName("square");
 
   const renderCurrentBoard = () => {
     let currentBoard = game.getBoard();
@@ -68,7 +68,7 @@ game = (() => {
     // const playerOneInput = mode === "single" ?
     //   nameInputs[0] : nameInputs[1];
     // const playerTwoInput = nameInputs[2];
-  const squares = Array.from(document.getElementsByClassName("cell"));
+  const squares = Array.from(document.getElementsByClassName("square"));
 
   // placeholders keep rows of 'undefined' from 'winning' and simplify code
   let board = [0,1,2,3,4,5,6,7,8];

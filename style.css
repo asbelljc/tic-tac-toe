@@ -17,7 +17,7 @@ html {
   font-family: 'Mayeka';
   margin: 0;
   padding: 0;
-  background-color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 85%);
 }
 
 body {
@@ -52,8 +52,8 @@ button {
   .square:hover:not(.win) {
     background-color: hsl(0, 0%, 100%);
     box-shadow: 
-      inset 8vw 8vw 6vw hsl(0, 0%, 90%),
-      inset -8vw -8vw 6vw hsl(0, 0%, 90%);
+      inset 8vw 8vw 6vw hsl(0, 0%, 85%),
+      inset -8vw -8vw 6vw hsl(0, 0%, 85%);
     transition: 
       background-color 0.4s,
       box-shadow 0.2s;
@@ -203,8 +203,8 @@ button:focus:not(:focus-visible) {
   gap: 2px;
   background-color: hsl(0, 0%, 10%);
   box-shadow: 
-    inset 7vw 7vw 6vw hsl(0, 0%, 90%),
-    inset -7vw -7vw 6vw hsl(0, 0%, 90%);
+    inset 7vw 7vw 6vw hsl(0, 0%, 85%),
+    inset -7vw -7vw 6vw hsl(0, 0%, 85%);
 }
 
 .square {
@@ -212,7 +212,7 @@ button:focus:not(:focus-visible) {
   justify-content: center;
   align-items: center;
   color: hsl(0, 0%, 30%);
-  background-color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 85%);
   font-size: 15vw;
   line-height: 0;
   transition: 
@@ -287,16 +287,16 @@ input[type=text] {
 
   .gameboard {
     box-shadow: 
-      inset 52.5px 52.5px 45px hsl(0, 0%, 90%),
-      inset -52.5px -52.5px 45px hsl(0, 0%, 90%);
+      inset 52.5px 52.5px 45px hsl(0, 0%, 85%),
+      inset -52.5px -52.5px 45px hsl(0, 0%, 85%);
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .square:hover {
+    .square:hover:not(.win) {
       background-color: hsl(0, 0%, 100%);
       box-shadow: 
-        inset 60px 60px 45px hsl(0, 0%, 90%),
-        inset -60px -60px 45px hsl(0, 0%, 90%);
+        inset 60px 60px 45px hsl(0, 0%, 85%),
+        inset -60px -60px 45px hsl(0, 0%, 85%);
       transition: 
         background-color 0.4s,
         box-shadow 0.2s;
