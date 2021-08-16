@@ -60,15 +60,8 @@ const display = (() => {
 
 game = (() => {
   let mode; // single or multi-player
-  // controls
-  const newGameBtn = document.getElementById("new-game");
-  const difficultyBtns = Array.from(document.getElementsByClassName("level"));
-  const startBtns = Array.from(document.getElementsByClassName("start"));
-  const nameInputs = Array.from(document.getElementsByClassName("name-input"));
-    // const playerOneInput = mode === "single" ?
-    //   nameInputs[0] : nameInputs[1];
-    // const playerTwoInput = nameInputs[2];
-  const squares = Array.from(document.getElementsByClassName("square"));
+  let playerOne;
+  let playerTwo;
 
   // placeholders keep rows of 'undefined' from 'winning' and simplify code
   let board = [0,1,2,3,4,5,6,7,8];
@@ -93,6 +86,25 @@ game = (() => {
     ) { console.log("[working code]") }
   };
 
+  return {
+    getBoard,
+    fillSquare
+  };
+})();
+
+///////////////////////////////////////////////////////////////////////////////
+
+const controller = (() => {
+  // buttons and inputs
+  const newGameBtn = document.getElementById("new-game");
+  const difficultyBtns = Array.from(document.getElementsByClassName("level"));
+  const startBtns = Array.from(document.getElementsByClassName("start"));
+  const nameInputs = Array.from(document.getElementsByClassName("name-input"));
+    const playerInput = nameInputs[0];
+    const playerOneInput = nameInputs[1];
+    const playerTwoInput = nameInputs[2];
+  const squares = Array.from(document.getElementsByClassName("square"));
+
   difficultyBtns.forEach(button => {
     button.addEventListener("click", e => {
       display.moveSlider(e);
@@ -100,11 +112,5 @@ game = (() => {
     });
   });
 
-  squares.forEach(square => {
-    square.addEventListener("click", fillSquare);
-  });
-
-  return {
-    getBoard
-  };
+  squares.forEach(square => square.addEventListener("click", game.fillSquare));
 })();

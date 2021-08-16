@@ -18,13 +18,21 @@ html {
   margin: 0;
   padding: 0;
   background-color: hsl(0, 0%, 85%);
+  height: 100%;
 }
 
 body {
+  display: flex; /* for 'new-game' button sticky-footer behavior */
+  flex-direction: column;
   width: 80vw;
   max-width: 600px;
   margin: auto;
   padding: none;
+  height: 100%;
+}
+/* for 'new-game' button sticky-footer behavior */
+.sticky-footer-wrapper {
+  flex: 1 0 auto;
 }
 
 button {
@@ -70,16 +78,13 @@ button:focus:not(:focus-visible) {
 
 .new-game {
   display: block;
-  position: fixed;
-  bottom: 5vw;
-  left: 0;
-  right: 0;
+  flex-shrink: 0; /* for 'new-game' button sticky-footer behavior */
   height: 35px;
   width: 150px;
   font-weight: 500;
   font-size: 16px;
   padding: none;
-  margin: auto;
+  margin: 5vw auto;
 }
 
 .start {
@@ -310,7 +315,7 @@ input[type=text] {
   }
 
   .new-game {
-    bottom: 50px;
+    margin: 50px auto;
   }
 }
 

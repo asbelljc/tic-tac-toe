@@ -8,51 +8,53 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="scoreboard" id="scoreboard">
-    <div class="player" id="player-one">
-      <div class="name">Player 1</div>
-      <div class="score">0</div>
+  <div class="sticky-footer-wrapper">
+    <div class="scoreboard" id="scoreboard">
+      <div class="player" id="player-one">
+        <div class="name">Player 1</div>
+        <div class="score">0</div>
+      </div>
+      <div class="message-box empty" id="message-box">
+        <div id="message">PLAYER WINS</div>
+        <div class="continue-msg click-to">click to continue</div>
+        <div class="continue-msg tap-to">tap to continue</div>
+      </div>
+      <div class="player" id="player-two">
+        <div class="name">Player 2</div>
+        <div class="score">0</div>
+      </div>
     </div>
-    <div class="message-box empty" id="message-box">
-      <div id="message">PLAYER WINS</div>
-      <div class="continue-msg click-to">click to continue</div>
-      <div class="continue-msg tap-to">tap to continue</div>
+    <div class="gameboard" id="gameboard">
+      <div id="0" class="square"></div>
+      <div id="1" class="square"></div>
+      <div id="2" class="square"></div>
+      <div id="3" class="square"></div>
+      <div id="4" class="square"></div>
+      <div id="5" class="square"></div>
+      <div id="6" class="square"></div>
+      <div id="7" class="square"></div>
+      <div id="8" class="square"></div>
     </div>
-    <div class="player" id="player-two">
-      <div class="name">Player 2</div>
-      <div class="score">0</div>
+    <div class="menu hidden" id="start-menu">
+      <button class="player-count">1 player</button>
+      <button class="player-count">2 player</button>
     </div>
-  </div>
-  <div class="gameboard" id="gameboard">
-    <div id="0" class="square"></div>
-    <div id="1" class="square"></div>
-    <div id="2" class="square"></div>
-    <div id="3" class="square"></div>
-    <div id="4" class="square"></div>
-    <div id="5" class="square"></div>
-    <div id="6" class="square"></div>
-    <div id="7" class="square"></div>
-    <div id="8" class="square"></div>
+    <div class="menu hidden" id="one-player-menu">
+      <input type="text" class="name-input" maxlength="12" placeholder="Player">
+      <div id="difficulty">
+        <span class="slider medium" id="slider"></span>
+        <button class="level">easy</button>
+        <button class="level">medium</button>
+        <button class="level">hard</button>
+      </div>
+      <button type="button" class="start">start</button>
+    </div>
+    <div class="menu hidden" id="two-player-menu">
+        <input type="text" class="name-input" maxlength="12" placeholder="Player 1">
+        <input type="text" class="name-input" maxlength="12" placeholder="Player 2">
+        <button type="button" class="start">start</button>
+    </div>
   </div>
   <button type="button" class="new-game" id="new-game">new game</button>
-  <div class="menu hidden" id="start-menu">
-    <button class="player-count">1 player</button>
-    <button class="player-count">2 player</button>
-  </div>
-  <div class="menu hidden" id="one-player-menu">
-    <input type="text" class="name-input" maxlength="12" placeholder="Player">
-    <div id="difficulty">
-      <span class="slider medium" id="slider"></span>
-      <button class="level">easy</button>
-      <button class="level">medium</button>
-      <button class="level">hard</button>
-    </div>
-    <button type="button" class="start">start</button>
-  </div>
-  <div class="menu hidden" id="two-player-menu">
-      <input type="text" class="name-input" maxlength="12" placeholder="Player 1">
-      <input type="text" class="name-input" maxlength="12" placeholder="Player 2">
-      <button type="button" class="start">start</button>
-  </div>
 </body>
 </html>
