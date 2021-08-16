@@ -49,7 +49,7 @@ button {
   .level:hover {
     cursor: pointer;
   }
-  .cell:hover:not(.win) {
+  .square:hover:not(.win) {
     background-color: hsl(0, 0%, 100%);
     box-shadow: 
       inset 8vw 8vw 6vw hsl(0, 0%, 90%),
@@ -207,7 +207,7 @@ button:focus:not(:focus-visible) {
     inset -7vw -7vw 6vw hsl(0, 0%, 90%);
 }
 
-.cell {
+.square {
   display: grid;
   justify-content: center;
   align-items: center;
@@ -271,7 +271,7 @@ input[type=text] {
     grid-area: 1 / 2 / span 1 / span 2;;
   }
 
-  .cell {
+  .square {
     font-size: 112.5px;
   }
 
@@ -292,7 +292,7 @@ input[type=text] {
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .cell:hover {
+    .square:hover {
       background-color: hsl(0, 0%, 100%);
       box-shadow: 
         inset 60px 60px 45px hsl(0, 0%, 90%),

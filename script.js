@@ -51,27 +51,34 @@ const display = (() => {
   }
 
   return {
-    moveSlider
+    moveSlider,
+    renderCurrentBoard
   }
 })();
 
 ///////////////////////////////////////////////////////////////////////////////
 
 game = (() => {
+  let mode; // single or multi-player
   // controls
   const newGameBtn = document.getElementById("new-game");
   const difficultyBtns = Array.from(document.getElementsByClassName("level"));
   const startBtns = Array.from(document.getElementsByClassName("start"));
   const nameInputs = Array.from(document.getElementsByClassName("name-input"));
-    const playerOneInput = mode === "single" ?
-      nameInputs[0] : nameInputs[1];
-    const playerTwoInput = nameInputs[2];
+    // const playerOneInput = mode === "single" ?
+    //   nameInputs[0] : nameInputs[1];
+    // const playerTwoInput = nameInputs[2];
   const squares = Array.from(document.getElementsByClassName("cell"));
 
   // placeholders keep rows of 'undefined' from 'winning' and simplify code
   let board = [0,1,2,3,4,5,6,7,8];
 
   const getBoard = () => board;
+
+  const fillSquare = e => {
+    board[parseInt(e.target.id)] = mode === "single" ? "X" : "O";
+    display.renderCurrentBoard();
+  };
 
   const checkForEnd = () => {
     if (
@@ -91,6 +98,10 @@ game = (() => {
       display.moveSlider(e);
       // setDifficulty();
     });
+  });
+
+  squares.forEach(square => {
+    square.addEventListener("click", fillSquare);
   });
 
   return {
