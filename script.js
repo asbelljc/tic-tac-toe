@@ -34,8 +34,6 @@ const display = (() => {
   // gameboard
   const gameboard = document.getElementById("gameboard");
     const squares = document.getElementsByClassName("cell");
-  // new game button
-  const newGameBtn = document.getElementById("new-game");
 
   const renderCurrentBoard = () => {
     let currentBoard = game.getBoard();
@@ -60,14 +58,22 @@ const display = (() => {
 ///////////////////////////////////////////////////////////////////////////////
 
 game = (() => {
+  // controls
+  const newGameBtn = document.getElementById("new-game");
+  const difficultyBtns = Array.from(document.getElementsByClassName("level"));
+  const startBtns = Array.from(document.getElementsByClassName("start"));
+  const nameInputs = Array.from(document.getElementsByClassName("name-input"));
+    const playerOneInput = mode === "single" ?
+      nameInputs[0] : nameInputs[1];
+    const playerTwoInput = nameInputs[2];
+  const squares = Array.from(document.getElementsByClassName("cell"));
+
   // placeholders keep rows of 'undefined' from 'winning' and simplify code
   let board = [0,1,2,3,4,5,6,7,8];
 
   const getBoard = () => board;
 
-  
-
-  const _checkForEnd = () => {
+  const checkForEnd = () => {
     if (
       board[0] === board[1] && board[1] === board[2] || // rows
       board[3] === board[4] && board[4] === board[5] || // .
@@ -80,8 +86,7 @@ game = (() => {
     ) { console.log("[working code]") }
   };
 
-  const levels = Array.from(document.getElementsByClassName("level"));
-  levels.forEach(button => {
+  difficultyBtns.forEach(button => {
     button.addEventListener("click", e => {
       display.moveSlider(e);
       // setDifficulty();
