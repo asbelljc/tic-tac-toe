@@ -9,7 +9,7 @@
 </head>
 <body>
   <div class="sticky-footer-wrapper">
-    <div class="scoreboard" id="scoreboard">
+    <div class="scoreboard hidden" id="scoreboard">
       <div class="player" id="player-one">
         <div class="name">Player 1</div>
         <div class="score">0</div>
@@ -24,7 +24,7 @@
         <div class="score">0</div>
       </div>
     </div>
-    <div class="gameboard" id="gameboard">
+    <div class="gameboard hidden" id="gameboard">
       <div id="0" class="square"></div>
       <div id="1" class="square"></div>
       <div id="2" class="square"></div>
@@ -39,7 +39,7 @@
       <button class="player-count">1 player</button>
       <button class="player-count">2 player</button>
     </div>
-    <div class="menu hidden" id="one-player-menu">
+    <div class="menu" id="one-player-menu">
       <input type="text" class="name-input" maxlength="12" placeholder="Player">
       <div id="difficulty">
         <span class="slider medium" id="slider"></span>
@@ -47,14 +47,14 @@
         <button class="level">medium</button>
         <button class="level">hard</button>
       </div>
-      <button type="button" class="start">start</button>
+      <button type="button" class="start" id="one-player-start">start</button>
     </div>
     <div class="menu hidden" id="two-player-menu">
         <input type="text" class="name-input" maxlength="12" placeholder="Player 1">
         <input type="text" class="name-input" maxlength="12" placeholder="Player 2">
-        <button type="button" class="start">start</button>
+        <button type="button" class="start" id="two-player-start">start</button>
     </div>
   </div>
-  <button type="button" class="new-game" id="new-game">new game</button>
+  <button type="button" class="new-game hidden" id="new-game">new game</button>
 </body>
 </html>
