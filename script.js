@@ -1,18 +1,5 @@
 let game;
 
-const Player = (name) => {
-  let score = 0;
-  const getScore = () => score;
-  const getName = () => name;
-  const win = () => score++;
-
-  return {
-    getScore,
-    getName,
-    win
-  };
-};
-
 ///////////////////////////////////////////////////////////////////////////////
 
 const display = (() => {
@@ -140,9 +127,10 @@ game = (() => {
         }
       }
     });
-    
+
     if (winningSquares.length) {
       display.animateWin(winningSquares);
+      controller.clickToContinue();
     }
   };
 
@@ -156,12 +144,39 @@ game = (() => {
     display.showDifficulty(e);
   };
 
+  const createPlayers = (names) => {
+    const Player = (name) => {
+      let score = 0;
+      const getScore = () => score;
+      const getName = () => name;
+      const win = () => score++;
+    
+      return {
+        getScore,
+        getName,
+        win
+      };
+    };
+    
+    if (mode === "single") {
+      playerOne = Player(names[0] || "Player");
+      playerTwo = Player("CPU");
+    } else {
+      playerOne = Player(names[1] || "Player 1");
+      playerTwo = Player(names[2] || "Player 2");
+    }
+  };
+
   const start = e => {
     turn = 1;
     display.changeScreen(e);
   };
 
+  document.addEventListener("setMode", setMode);
   document.addEventListener("setDifficulty", setDifficulty);
+  document.addEventListener("start", start);
+  document.addEventListener("fillSquare", fillSquare);
+  document.addEventListener("reset", reset);
 
   return {
     getBoard
@@ -212,10 +227,22 @@ const controller = (() => {
   });
 
   const getNames = () => nameInputs.map(input => input.innerText);
+
   const resetNameInputs = () => nameInputs.forEach(input => input.innerText === "");
+
+  const clickToContinue = () => {
+    const nextRound = () => {
+      // tell the game module to start the next round
+      document.dispatchEvent(new CustomEvent("nextRound"));
+      // then stop listening for clicks
+      document.removeEventListener("click", nextRound);
+    };
+    document.addEventListener("click", nextRound);
+  };
 
   return {
     getNames,
-    resetNameInputs
+    resetNameInputs,
+    clickToContinue
   };
 })();
