@@ -61,7 +61,13 @@ const display = (() => {
     }
   }
 
+  const showDifficulty = e => {
+    slider.className = `slider ${e.detail.difficulty}`;
+  }
+
   const renderCurrentBoard = () => {
+    // first remove animated winning squares from last round
+    squares.forEach(square => square.classList.remove("win"));
     let currentBoard = game.getBoard();
     for (let i = 0; i < squares.length; i++) {
       if (typeof currentBoard[i] === "number") {
@@ -72,14 +78,17 @@ const display = (() => {
     }
   }
 
-  const showDifficulty = e => {
-    slider.className = `slider ${e.detail.difficulty}`;
-  }
+  const animateWin = (winningSquares) => {
+    winningSquares.forEach(square => {
+      squares[square].classList.add("win");
+    });
+  };
 
   return {
     changeScreen,
+    showDifficulty,
     renderCurrentBoard,
-    showDifficulty
+    animateWin
   };
 })();
 
@@ -109,7 +118,7 @@ game = (() => {
   const getBoard = () => board;
 
   const fillSquare = e => {
-    // check if square is empty before 
+    // check if square is empty before filling
     if (typeof board[parseInt(e.detail.square)] === "number") {
       // odd turns should always mark X (because X starts in tic-tac-toe)
       board[parseInt(e.detail.square)] = turn % 2 === 1 ? "X" : "O";
@@ -120,9 +129,21 @@ game = (() => {
   };
 
   const checkForEnd = () => {
-    const isWin = winLines.some(winLine => {
-      
+    let winningSquares = [];
+    // for each possible win line...
+    winLines.forEach(line => {
+      // ...if every corresponding square on the board has the same mark...
+      if (line.every(square => board[square] === board[line[0]])) {
+        // ...collect those winning squares.
+        if (!winningSquares.includes(square)) { // ignore squares already collected,
+          winningSquares.push(square);         // implying a double line-win
+        }
+      }
     });
+    
+    if (winningSquares.length) {
+      display.animateWin(winningSquares);
+    }
   };
 
   const setMode = e => {
