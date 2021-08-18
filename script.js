@@ -1,4 +1,10 @@
+// TODO:
+//   [ ] remove square event listeners so can't mark during win animation(?) might be ok...
+//   [x] make visual turn indicator
+//   [ ] START AT BEGINNING OF GAME PROCESS and code each step before going to next
+
 let game;
+let controller;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -10,10 +16,14 @@ const display = (() => {
   const twoPlayerMenu = document.getElementById("two-player-menu");
   // scoreboard
   const scoreboard = document.getElementById("scoreboard");
-  const playerOneName = document.querySelector("#player-one .name");
-  const playerOneScore = document.querySelector("#player-one .score");
-  const playerTwoName = document.querySelector("#player-two .name");
-  const playerTwoScore = document.querySelector("#player-two .score");
+  const playerOneBox = document.getElementById("player-one");
+  const playerOneTurn = playerOneBox.querySelector(".turn");
+  const playerOneName = playerOneBox.querySelector(".name");
+  const playerOneScore = playerOneBox.querySelector(".score");
+  const playerTwoBox = document.getElementById("player-two");
+  const playerTwoTurn = playerTwoBox.querySelector(".turn")
+  const playerTwoName = playerTwoBox.querySelector(".name");
+  const playerTwoScore = playerTwoBox.querySelector(".score");
   const messageBox = document.getElementById("message-box");
   const message = document.getElementById("message");
   // gameboard
@@ -46,15 +56,13 @@ const display = (() => {
       gameboard.classList.add("hidden");
       newGameBtn.classList.add("hidden");
     }
-  }
+  };
 
-  const showDifficulty = e => {
+  const changeDifficulty = e => {
     slider.className = `slider ${e.detail.difficulty}`;
-  }
+  };
 
   const renderCurrentBoard = () => {
-    // first remove animated winning squares from last round
-    squares.forEach(square => square.classList.remove("win"));
     let currentBoard = game.getBoard();
     for (let i = 0; i < squares.length; i++) {
       if (typeof currentBoard[i] === "number") {
@@ -63,7 +71,20 @@ const display = (() => {
         squares[i].innerText = currentBoard[i];
       }
     }
-  }
+  };
+
+  const changeTurn = () => {
+    const arrow = document.createElement("img");
+    arrow.src = "Images/down-arrow.svg";
+    
+    if (playerOneTurn.firstElementChild) {
+      playerOneTurn.removeChild(playerOneTurn.firstElementChild);
+      playerTwoTurn.appendChild(arrow);
+    } else {
+      playerTwoTurn.removeChild(playerTwoTurn.firstElementChild);
+      playerOneTurn.appendChild(arrow);
+    }
+  };
 
   const animateWin = (winningSquares) => {
     winningSquares.forEach(square => {
@@ -73,8 +94,9 @@ const display = (() => {
 
   return {
     changeScreen,
-    showDifficulty,
+    changeDifficulty,
     renderCurrentBoard,
+    changeTurn,
     animateWin
   };
 })();
@@ -122,9 +144,11 @@ game = (() => {
       // ...if every corresponding square on the board has the same mark...
       if (line.every(square => board[square] === board[line[0]])) {
         // ...collect those winning squares.
-        if (!winningSquares.includes(square)) { // ignore squares already collected,
-          winningSquares.push(square);         // implying a double line-win
-        }
+        line.forEach(square => {
+          if (!winningSquares.includes(square)) { // ignore squares already collected,
+            winningSquares.push(square);         // implying a double-line win
+          }
+        });
       }
     });
 
@@ -141,7 +165,7 @@ game = (() => {
 
   const setDifficulty = e => {
     difficulty = e.detail.difficulty;
-    display.showDifficulty(e);
+    display.changeDifficulty(e);
   };
 
   const createPlayers = (names) => {
@@ -157,7 +181,7 @@ game = (() => {
         win
       };
     };
-    
+
     if (mode === "single") {
       playerOne = Player(names[0] || "Player");
       playerTwo = Player("CPU");
@@ -176,7 +200,7 @@ game = (() => {
   document.addEventListener("setDifficulty", setDifficulty);
   document.addEventListener("start", start);
   document.addEventListener("fillSquare", fillSquare);
-  document.addEventListener("reset", reset);
+  // document.addEventListener("reset", reset);
 
   return {
     getBoard
@@ -185,7 +209,7 @@ game = (() => {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const controller = (() => {
+controller = (() => {
   // buttons and inputs
   const gameModeButtons = Array.from(document.getElementsByClassName("player-count"));
   const difficultyBtns = Array.from(document.getElementsByClassName("level"));
@@ -226,9 +250,9 @@ const controller = (() => {
     );
   });
 
-  const getNames = () => nameInputs.map(input => input.innerText);
+  const getNames = () => nameInputs.map(input => input.value);
 
-  const resetNameInputs = () => nameInputs.forEach(input => input.innerText === "");
+  const resetNameInputs = () => nameInputs.forEach(input => input.value === "");
 
   const clickToContinue = () => {
     const nextRound = () => {
@@ -237,6 +261,7 @@ const controller = (() => {
       // then stop listening for clicks
       document.removeEventListener("click", nextRound);
     };
+
     document.addEventListener("click", nextRound);
   };
 

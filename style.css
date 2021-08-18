@@ -130,6 +130,11 @@ button:focus:not(:focus-visible) {
   align-items: center;
 }
 
+.turn {
+  height: 12px;
+  width: 12px;
+}
+
 .name {
   font-size: 20px;
   font-weight: 500;
