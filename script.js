@@ -5,6 +5,21 @@
 
 let game;
 let controller;
+let playerOne;
+let playerTwo;
+
+const Player = (name) => {
+  let score = 0;
+  const getScore = () => score;
+  const getName = () => name;
+  const win = () => score++;
+
+  return {
+    getScore,
+    getName,
+    win
+  };
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,50 +31,44 @@ const display = (() => {
   const twoPlayerMenu = document.getElementById("two-player-menu");
   // scoreboard
   const scoreboard = document.getElementById("scoreboard");
-  const playerOneBox = document.getElementById("player-one");
-  const playerOneTurn = playerOneBox.querySelector(".turn");
-  const playerOneName = playerOneBox.querySelector(".name");
-  const playerOneScore = playerOneBox.querySelector(".score");
-  const playerTwoBox = document.getElementById("player-two");
-  const playerTwoTurn = playerTwoBox.querySelector(".turn")
-  const playerTwoName = playerTwoBox.querySelector(".name");
-  const playerTwoScore = playerTwoBox.querySelector(".score");
+  const playerOneTurn = document.querySelector("#player-one .turn");
+  const playerOneName = document.querySelector("#player-one .name");
+  const playerOneScore = document.querySelector("#player-one .score");
+  const playerTwoTurn = document.querySelector("#player-two .turn")
+  const playerTwoName = document.querySelector("#player-two .name");
+  const playerTwoScore = document.querySelector("#player-two .score");
   const messageBox = document.getElementById("message-box");
   const message = document.getElementById("message");
+  const arrow = document.createElement("img"); // used as turn indicator
+    arrow.src = "Images/down-arrow.svg";
   // gameboard
   const gameboard = document.getElementById("gameboard");
   const squares = document.getElementsByClassName("square");
   const newGameBtn = document.getElementById("new-game");
 
-  const changeScreen = e => {
-    // start menu options
-    if (e.detail.mode === "1 player") {
-      startMenu.classList.add("hidden");
-      onePlayerMenu.classList.remove("hidden");
-    } else if (e.detail.mode === "2 player") {
-      startMenu.classList.add("hidden");
-      twoPlayerMenu.classList.remove("hidden");
-      // 1- and 2-player options both do the same thing
-    } else if (e.detail.button === "start") {
-      onePlayerMenu.classList.add("hidden");
-      playerOneName.innerText === game.playerOne.getName();
-      playerOneScore.innerText === 0;
-      playerTwoName.innerText === game.playerTwo.getName();
-      playerTwoScore.innerText === 0;
-      scoreboard.classList.remove("empty");
-      gameboard.classList.remove("hidden");
-      newGameBtn.classList.remove("hidden");
-      // new-game button circles back to start menu
-    } else if (e.target.id === "new-game") {
-      onePlayerMenu.classList.remove("hidden");
-      scoreboard.classList.add("empty");
-      gameboard.classList.add("hidden");
-      newGameBtn.classList.add("hidden");
+  const updateScores = () => {
+    playerOneScore.innerText = playerOne.getScore();
+    playerTwoScore.innerText = playerTwo.getScore();
+  };
+
+  const showStartingTurn = () => {
+    if (game.playerOneStarts && playerTwoTurn.length) {
+      playerTwoTurn.removeChild(playerTwoTurn.firstElementChild);
+      playerOneTurn.appendChild(arrow);
+    } else if (!game.playerOneStarts && playerOneTurn.length) {
+      playerOneTurn.removeChild(playerOneTurn.firstElementChild);
+      playerTwoTurn.appendChild(arrow);
     }
   };
 
-  const changeDifficulty = e => {
-    slider.className = `slider ${e.detail.difficulty}`;
+  const changeTurn = () => {
+    if (playerOneTurn.firstElementChild) {
+      playerOneTurn.removeChild(playerOneTurn.firstElementChild);
+      playerTwoTurn.appendChild(arrow);
+    } else {
+      playerTwoTurn.removeChild(playerTwoTurn.firstElementChild);
+      playerOneTurn.appendChild(arrow);
+    }
   };
 
   const renderCurrentBoard = () => {
@@ -73,31 +82,61 @@ const display = (() => {
     }
   };
 
-  const changeTurn = () => {
-    const arrow = document.createElement("img");
-    arrow.src = "Images/down-arrow.svg";
-    
-    if (playerOneTurn.firstElementChild) {
-      playerOneTurn.removeChild(playerOneTurn.firstElementChild);
-      playerTwoTurn.appendChild(arrow);
-    } else {
-      playerTwoTurn.removeChild(playerTwoTurn.firstElementChild);
-      playerOneTurn.appendChild(arrow);
+  const changeScreen = e => {
+    // start menu options
+    if (e.detail.mode === "1 player") {
+      startMenu.classList.add("hidden");
+      onePlayerMenu.classList.remove("hidden");
+    } else if (e.detail.mode === "2 player") {
+      startMenu.classList.add("hidden");
+      twoPlayerMenu.classList.remove("hidden");
+      // 1- and 2-player options both do the same thing
+    } else if (e.detail.button === "start") {
+      onePlayerMenu.classList.add("hidden");
+      twoPlayerMenu.classList.add("hidden");
+      playerOneName.innerText = playerOne.getName();
+      playerTwoName.innerText = playerTwo.getName();
+      updateScores();
+      scoreboard.classList.remove("empty");
+      gameboard.classList.remove("hidden");
+      newGameBtn.classList.remove("hidden");
+    } else if (e.detail === "nextRound") {
+      updateScores();
+      showStartingTurn();
+      renderCurrentBoard();
+      // new-game button circles back to start menu
+    } else if (e.detail.button === "new-game") {
+      onePlayerMenu.classList.remove("hidden");
+      scoreboard.classList.add("empty");
+      gameboard.classList.add("hidden");
+      newGameBtn.classList.add("hidden");
     }
   };
 
-  const animateWin = (winningSquares) => {
+  const setDifficulty = e => {
+    slider.className = `slider ${e.detail.difficulty}`;
+  };
+
+  const showWin = (winningSquares, winner) => {
     winningSquares.forEach(square => {
       squares[square].classList.add("win");
     });
+    message.innerText = `${winner.toUpperCase()} WINS!`;
+    messageBox.classList.remove("empty");
+  };
+
+  const showDraw = () => {
+    message.innerText = "DRAW!";
+    messageBox.classList.remove("empty");
   };
 
   return {
     changeScreen,
-    changeDifficulty,
+    setDifficulty,
     renderCurrentBoard,
     changeTurn,
-    animateWin
+    showWin,
+    showDraw
   };
 })();
 
@@ -106,9 +145,8 @@ const display = (() => {
 game = (() => {
   let mode; // single or multi-player
   let difficulty = "medium"; // establish default diffulty
-  let turn = 1;
-  let playerOne;
-  let playerTwo;
+  let turn = "X"; // used to make sure x is the first mark in every game
+  let playerOneStarts; // used to alternate who plays first
 
   // integer placeholders keep rows of 'undefined' from 'winning' and simplify code
   let board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -126,18 +164,20 @@ game = (() => {
 
   const getBoard = () => board;
 
+  const resetBoard = () => {
+    board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  };
+
   const fillSquare = e => {
     // check if square is empty before filling
     if (typeof board[parseInt(e.detail.square)] === "number") {
-      // odd turns should always mark X (because X starts in tic-tac-toe)
-      board[parseInt(e.detail.square)] = turn % 2 === 1 ? "X" : "O";
+      board[parseInt(e.detail.square)] = turn;
       display.renderCurrentBoard();
-      checkForEnd();
-      turn++;
+      processTurn();
     }
   };
 
-  const checkForEnd = () => {
+  const processTurn = () => {
     let winningSquares = [];
     // for each possible win line...
     winLines.forEach(line => {
@@ -151,10 +191,23 @@ game = (() => {
         });
       }
     });
-
+    // If there was a win...
     if (winningSquares.length) {
-      display.animateWin(winningSquares);
       controller.clickToContinue();
+      // ...announce it and give a point to the appropriate player.
+      if (playerOneStarts && turn === "X" || !playerOneStarts && turn === "O") {
+        playerOne.win();
+        display.showWin(winningSquares, playerOne.getName());
+      } else {
+        playerTwo.win();
+        display.showWin(winningSquares, playerTwo.getName());
+      } // If there was no win and all squares are filled...
+    } else if (board.every(square => typeof square === "string")) {
+      controller.clickToContinue();
+      display.showDraw(); // ...announce a tie.
+    } else { // If there was no win and empty squares remain...
+      turn = turn === "X" ? "O" : "X";
+      display.changeTurn(); // ...just change turns.
     }
   };
 
@@ -165,23 +218,10 @@ game = (() => {
 
   const setDifficulty = e => {
     difficulty = e.detail.difficulty;
-    display.changeDifficulty(e);
+    display.setDifficulty(e);
   };
 
   const createPlayers = (names) => {
-    const Player = (name) => {
-      let score = 0;
-      const getScore = () => score;
-      const getName = () => name;
-      const win = () => score++;
-    
-      return {
-        getScore,
-        getName,
-        win
-      };
-    };
-
     if (mode === "single") {
       playerOne = Player(names[0] || "Player");
       playerTwo = Player("CPU");
@@ -192,7 +232,16 @@ game = (() => {
   };
 
   const start = e => {
-    turn = 1;
+    turn = "X";
+    playerOneStarts = true;
+    createPlayers(controller.getNames());
+    display.changeScreen(e);
+  };
+
+  const nextRound = e => {
+    turn = "X";
+    playerOneStarts = !playerOneStarts;
+    resetBoard();
     display.changeScreen(e);
   };
 
@@ -200,10 +249,12 @@ game = (() => {
   document.addEventListener("setDifficulty", setDifficulty);
   document.addEventListener("start", start);
   document.addEventListener("fillSquare", fillSquare);
+  document.addEventListener("nextRound", nextRound);
   // document.addEventListener("reset", reset);
 
   return {
-    getBoard
+    getBoard,
+    processTurn
   };
 })();
 
@@ -238,32 +289,47 @@ controller = (() => {
     );
   }));
 
-  squares.forEach(square => square.addEventListener("click", e => {
-    document.dispatchEvent(
-      new CustomEvent("fillSquare", { detail: { square: e.target.id } })
-    )
-  }));
-
   newGameBtn.addEventListener("click", e => {
     document.dispatchEvent(
       new CustomEvent("reset", { detail: { button: e.target.id } })
     );
   });
 
+  const fillSquare = e => {
+    document.dispatchEvent(
+      new CustomEvent("fillSquare", { detail: { square: e.target.id } })
+    )
+    e.stopPropagation(); // prevents click from being caught by temporary
+  };                     // 'clickToContinue' event listener
+
+  const addSquareListeners = () => {
+    squares.forEach(square => square.addEventListener("click", fillSquare));
+  };
+
+  const removeSquareListeners = () => {
+    squares.forEach(square => square.removeEventListener("click", fillSquare));
+  };
+
   const getNames = () => nameInputs.map(input => input.value);
 
   const resetNameInputs = () => nameInputs.forEach(input => input.value === "");
 
   const clickToContinue = () => {
-    const nextRound = () => {
+    const nextRound = e => {
       // tell the game module to start the next round
-      document.dispatchEvent(new CustomEvent("nextRound"));
-      // then stop listening for clicks
+      document.dispatchEvent(
+        new CustomEvent("nextRound", { detail: "nextRound" })
+      );
+      // then stop listening for nextRound and listen for fillSquare again
       document.removeEventListener("click", nextRound);
+      e.stopPropagation();
+      addSquareListeners();
     };
-
+    removeSquareListeners(); // need to disallow fillSquare while showing round win
     document.addEventListener("click", nextRound);
   };
+
+  addSquareListeners();
 
   return {
     getNames,

@@ -9,7 +9,7 @@
 </head>
 <body>
   <div class="sticky-footer-wrapper">
-    <div class="scoreboard" id="scoreboard">
+    <div class="scoreboard empty" id="scoreboard">
       <div class="player" id="player-one">
         <div class="turn">
           <img src="Images/down-arrow.svg">
@@ -17,8 +17,8 @@
         <div class="name">Player 1</div>
         <div class="score">0</div>
       </div>
-      <div class="message-box" id="message-box">
-        <div id="message">PLAYER WINS</div>
+      <div class="message-box empty" id="message-box">
+        <div id="message"></div>
         <div class="continue-msg click-to">click to continue</div>
         <div class="continue-msg tap-to">tap to continue</div>
       </div>
@@ -28,7 +28,7 @@
         <div class="score">0</div>
       </div>
     </div>
-    <div class="gameboard" id="gameboard">
+    <div class="gameboard hidden" id="gameboard">
       <div id="0" class="square"></div>
       <div id="1" class="square"></div>
       <div id="2" class="square"></div>
@@ -39,7 +39,7 @@
       <div id="7" class="square"></div>
       <div id="8" class="square"></div>
     </div>
-    <div class="menu hidden" id="start-menu">
+    <div class="menu" id="start-menu">
       <button class="player-count">1 player</button>
       <button class="player-count">2 player</button>
     </div>
@@ -59,6 +59,6 @@
         <button type="button" class="start" id="two-player-start">start</button>
     </div>
   </div>
-  <button type="button" class="new-game" id="new-game">new game</button>
+  <button type="button" class="new-game hidden" id="new-game">new game</button>
 </body>
 </html>

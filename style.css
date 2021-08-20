@@ -162,6 +162,7 @@ button:focus:not(:focus-visible) {
 }
 
 #message {
+  height: 27px;
   font-size: 24px;
   font-weight: 500;
 }
