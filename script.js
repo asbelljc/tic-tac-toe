@@ -52,10 +52,11 @@ const display = (() => {
   };
 
   const showStartingTurn = () => {
-    if (game.playerOneStarts && playerTwoTurn.length) {
+    // if one player is supposed to start but the other has the turn indicator, swap them
+    if (game.doesPlayerOneStart() && playerTwoTurn.firstElementChild) {
       playerTwoTurn.removeChild(playerTwoTurn.firstElementChild);
       playerOneTurn.appendChild(arrow);
-    } else if (!game.playerOneStarts && playerOneTurn.length) {
+    } else if (!game.doesPlayerOneStart() && playerOneTurn.firstElementChild) {
       playerOneTurn.removeChild(playerOneTurn.firstElementChild);
       playerTwoTurn.appendChild(arrow);
     }
@@ -82,6 +83,12 @@ const display = (() => {
     }
   };
 
+  const stopWinAnimation = () => {
+    Array.from(squares).forEach(square => {
+      square.classList.remove("win");
+    });
+  };
+
   const changeScreen = e => {
     // start menu options
     if (e.detail.mode === "1 player") {
@@ -92,6 +99,9 @@ const display = (() => {
       twoPlayerMenu.classList.remove("hidden");
       // 1- and 2-player options both do the same thing
     } else if (e.detail.button === "start") {
+      messageBox.classList.add("empty");
+      stopWinAnimation();
+      showStartingTurn();
       onePlayerMenu.classList.add("hidden");
       twoPlayerMenu.classList.add("hidden");
       playerOneName.innerText = playerOne.getName();
@@ -101,12 +111,14 @@ const display = (() => {
       gameboard.classList.remove("hidden");
       newGameBtn.classList.remove("hidden");
     } else if (e.detail === "nextRound") {
+      messageBox.classList.add("empty");
+      stopWinAnimation();
       updateScores();
       showStartingTurn();
       renderCurrentBoard();
       // new-game button circles back to start menu
     } else if (e.detail.button === "new-game") {
-      onePlayerMenu.classList.remove("hidden");
+      startMenu.classList.remove("hidden");
       scoreboard.classList.add("empty");
       gameboard.classList.add("hidden");
       newGameBtn.classList.add("hidden");
@@ -161,6 +173,8 @@ game = (() => {
     [0, 4, 8], // diagonals
     [2, 4, 6]
   ];
+  // need getter function for display to properly read this value
+  const doesPlayerOneStart = () => playerOneStarts;
 
   const getBoard = () => board;
 
@@ -245,16 +259,21 @@ game = (() => {
     display.changeScreen(e);
   };
 
+  const reset = e => {
+    display.changeScreen(e);
+  };
+
   document.addEventListener("setMode", setMode);
   document.addEventListener("setDifficulty", setDifficulty);
   document.addEventListener("start", start);
   document.addEventListener("fillSquare", fillSquare);
   document.addEventListener("nextRound", nextRound);
-  // document.addEventListener("reset", reset);
+  document.addEventListener("reset", reset);
 
   return {
     getBoard,
-    processTurn
+    processTurn,
+    doesPlayerOneStart
   };
 })();
 
@@ -293,6 +312,8 @@ controller = (() => {
     document.dispatchEvent(
       new CustomEvent("reset", { detail: { button: e.target.id } })
     );
+    // clear previously entered names before next round
+    nameInputs.forEach(input => input.value = "");
   });
 
   const fillSquare = e => {
@@ -310,10 +331,6 @@ controller = (() => {
     squares.forEach(square => square.removeEventListener("click", fillSquare));
   };
 
-  const getNames = () => nameInputs.map(input => input.value);
-
-  const resetNameInputs = () => nameInputs.forEach(input => input.value === "");
-
   const clickToContinue = () => {
     const nextRound = e => {
       // tell the game module to start the next round
@@ -329,11 +346,12 @@ controller = (() => {
     document.addEventListener("click", nextRound);
   };
 
+  const getNames = () => nameInputs.map(input => input.value);
+
   addSquareListeners();
 
   return {
     getNames,
-    resetNameInputs,
     clickToContinue
   };
 })();
