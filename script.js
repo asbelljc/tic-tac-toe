@@ -51,6 +51,11 @@ const display = (() => {
     playerTwoScore.innerText = playerTwo.getScore();
   };
 
+  const updateNames = () => {
+    playerOneName.innerText = playerOne.getName();
+    playerTwoName.innerText = playerTwo.getName();
+  };
+
   const showStartingTurn = () => {
     // if one player is supposed to start but the other has the turn indicator, swap them
     if (game.doesPlayerOneStart() && playerTwoTurn.firstElementChild) {
@@ -83,10 +88,24 @@ const display = (() => {
     }
   };
 
+  const showWin = (winningSquares, winner) => {
+    winningSquares.forEach(square => {
+      squares[square].classList.add("win");
+    });
+    message.innerText = `${winner.toUpperCase()} WINS!`;
+    messageBox.classList.remove("empty");
+  };
+
+  const showDraw = () => {
+    message.innerText = "DRAW!";
+    messageBox.classList.remove("empty");
+  };
+
   const stopWinAnimation = () => {
     Array.from(squares).forEach(square => {
       square.classList.remove("win");
     });
+    messageBox.classList.add("empty");
   };
 
   const changeScreen = e => {
@@ -99,19 +118,17 @@ const display = (() => {
       twoPlayerMenu.classList.remove("hidden");
       // 1- and 2-player options both do the same thing
     } else if (e.detail.button === "start") {
-      messageBox.classList.add("empty");
-      stopWinAnimation();
-      showStartingTurn();
       onePlayerMenu.classList.add("hidden");
       twoPlayerMenu.classList.add("hidden");
-      playerOneName.innerText = playerOne.getName();
-      playerTwoName.innerText = playerTwo.getName();
+      stopWinAnimation();
+      showStartingTurn();
+      updateNames();
       updateScores();
+      renderCurrentBoard();
       scoreboard.classList.remove("empty");
       gameboard.classList.remove("hidden");
       newGameBtn.classList.remove("hidden");
     } else if (e.detail === "nextRound") {
-      messageBox.classList.add("empty");
       stopWinAnimation();
       updateScores();
       showStartingTurn();
@@ -127,19 +144,6 @@ const display = (() => {
 
   const setDifficulty = e => {
     slider.className = `slider ${e.detail.difficulty}`;
-  };
-
-  const showWin = (winningSquares, winner) => {
-    winningSquares.forEach(square => {
-      squares[square].classList.add("win");
-    });
-    message.innerText = `${winner.toUpperCase()} WINS!`;
-    messageBox.classList.remove("empty");
-  };
-
-  const showDraw = () => {
-    message.innerText = "DRAW!";
-    messageBox.classList.remove("empty");
   };
 
   return {
@@ -163,6 +167,19 @@ game = (() => {
   // integer placeholders keep rows of 'undefined' from 'winning' and simplify code
   let board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
+  // need getter function for display to properly read this value
+  const doesPlayerOneStart = () => playerOneStarts;
+
+  const getBoard = () => board;
+
+  const getFreeSquares = () => {
+    return board.filter(square => typeof square === "number");
+  };
+
+  const resetBoard = () => {
+    board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  };
+
   const winLines = [
     [0, 1, 2], // rows
     [3, 4, 5],
@@ -173,25 +190,14 @@ game = (() => {
     [0, 4, 8], // diagonals
     [2, 4, 6]
   ];
-  // need getter function for display to properly read this value
-  const doesPlayerOneStart = () => playerOneStarts;
 
-  const getBoard = () => board;
-
-  const resetBoard = () => {
-    board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const isWin = () => {
+    return winLines.some(line => {
+      return line.every(square => board[square] === board[line[0]]);
+    });
   };
 
-  const fillSquare = e => {
-    // check if square is empty before filling
-    if (typeof board[parseInt(e.detail.square)] === "number") {
-      board[parseInt(e.detail.square)] = turn;
-      display.renderCurrentBoard();
-      processTurn();
-    }
-  };
-
-  const processTurn = () => {
+  const getWinningSquares = () => {
     let winningSquares = [];
     // for each possible win line...
     winLines.forEach(line => {
@@ -205,16 +211,29 @@ game = (() => {
         });
       }
     });
+    return winningSquares;
+  };
+
+  const fillSquare = e => {
+    // check if square is empty before filling
+    if (getFreeSquares().includes(parseInt(e.detail.square))) {
+      board[parseInt(e.detail.square)] = turn;
+      display.renderCurrentBoard();
+      processTurn();
+    }
+  };
+
+  const processTurn = () => {
     // If there was a win...
-    if (winningSquares.length) {
+    if (isWin()) {
       controller.clickToContinue();
       // ...announce it and give a point to the appropriate player.
       if (playerOneStarts && turn === "X" || !playerOneStarts && turn === "O") {
         playerOne.win();
-        display.showWin(winningSquares, playerOne.getName());
+        display.showWin(getWinningSquares(), playerOne.getName());
       } else {
         playerTwo.win();
-        display.showWin(winningSquares, playerTwo.getName());
+        display.showWin(getWinningSquares(), playerTwo.getName());
       } // If there was no win and all squares are filled...
     } else if (board.every(square => typeof square === "string")) {
       controller.clickToContinue();
@@ -248,6 +267,7 @@ game = (() => {
   const start = e => {
     turn = "X";
     playerOneStarts = true;
+    resetBoard();
     createPlayers(controller.getNames());
     display.changeScreen(e);
   };
@@ -262,6 +282,10 @@ game = (() => {
   const reset = e => {
     display.changeScreen(e);
   };
+
+  // const minimax = (newBoard, player) {
+  //   let freeSquares = 
+  // };
 
   document.addEventListener("setMode", setMode);
   document.addEventListener("setDifficulty", setDifficulty);
