@@ -171,8 +171,8 @@ game = (() => {
   const doesPlayerOneStart = () => playerOneStarts;
 
   const getBoard = () => board;
-
-  const getFreeSquares = () => {
+  // needs argument for use in minimax function
+  const getFreeSquares = (board) => {
     return board.filter(square => typeof square === "number");
   };
 
@@ -190,14 +190,14 @@ game = (() => {
     [0, 4, 8], // diagonals
     [2, 4, 6]
   ];
-
-  const isWin = () => {
+  // needs argument for use in minimax function
+  const isWin = (board) => {
     return winLines.some(line => {
       return line.every(square => board[square] === board[line[0]]);
     });
   };
-
-  const getWinningSquares = () => {
+  // needs argument for use in minimax function
+  const getWinningSquares = (board) => {
     let winningSquares = [];
     // for each possible win line...
     winLines.forEach(line => {
@@ -216,7 +216,7 @@ game = (() => {
 
   const fillSquare = e => {
     // check if square is empty before filling
-    if (getFreeSquares().includes(parseInt(e.detail.square))) {
+    if (getFreeSquares(board).includes(parseInt(e.detail.square))) {
       board[parseInt(e.detail.square)] = turn;
       display.renderCurrentBoard();
       processTurn();
@@ -225,15 +225,15 @@ game = (() => {
 
   const processTurn = () => {
     // If there was a win...
-    if (isWin()) {
+    if (isWin(board)) {
       controller.clickToContinue();
       // ...announce it and give a point to the appropriate player.
       if (playerOneStarts && turn === "X" || !playerOneStarts && turn === "O") {
         playerOne.win();
-        display.showWin(getWinningSquares(), playerOne.getName());
+        display.showWin(getWinningSquares(board), playerOne.getName());
       } else {
         playerTwo.win();
-        display.showWin(getWinningSquares(), playerTwo.getName());
+        display.showWin(getWinningSquares(board), playerTwo.getName());
       } // If there was no win and all squares are filled...
     } else if (board.every(square => typeof square === "string")) {
       controller.clickToContinue();
@@ -283,9 +283,73 @@ game = (() => {
     display.changeScreen(e);
   };
 
-  // const minimax = (newBoard, player) {
-  //   let freeSquares = 
-  // };
+  const getHumanMark = () => {
+    return playerOneStarts ? "X" : "O";
+  };
+
+  const getCpuMark = () => {
+    return playerOneStarts ? "O" : "X";
+  };
+
+  const minimax = (newBoard, mark) => {
+    const freeSquares = getFreeSquares(newBoard);
+    const humanMark = getHumanMark();
+    const cpuMark = getCpuMark();
+
+    // For each possible move, if there is a win for the cpu, score is positive
+    if (isWin(newBoard) && getWinningSquares(newBoard)[0] === cpuMark) {
+      return { score: 1 };
+      // If there's a win for the human, score is negative
+    } else if (isWin(newBoard)) {
+      return { score: -1 };
+      // If there is no win and no free spaces left, score is neutral
+    } else if (freeSquares.length === 0) {
+      return { score: 0 };
+    }
+
+    let moves = [];
+
+    for (let i = 0; i < freeSquares.length; i++) {
+      let move = {};
+      move.index = newBoard[freeSquares[i]];
+
+      newBoard[freeSquares[i]] = mark;
+
+      if (mark === cpuMark) {
+        let result = minimax(newBoard, humanMark);
+        move.score = result.score;
+      } else {
+        let result = minimax(newBoard, cpuMark);
+        move.score = result.score;
+      }
+
+      newBoard[freeSquares[i]] = move.index;
+
+      moves.push(move);
+    }
+
+    let bestMove;
+
+    if (mark === cpuMark) {
+      let bestScore = -10000;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = 10000;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+
+    return moves[bestMove];
+  };
 
   document.addEventListener("setMode", setMode);
   document.addEventListener("setDifficulty", setDifficulty);
@@ -297,7 +361,10 @@ game = (() => {
   return {
     getBoard,
     processTurn,
-    doesPlayerOneStart
+    doesPlayerOneStart,
+    minimax,
+    getHumanMark,
+    getCpuMark
   };
 })();
 
@@ -376,6 +443,7 @@ controller = (() => {
 
   return {
     getNames,
-    clickToContinue
+    clickToContinue,
+    squares
   };
 })();
