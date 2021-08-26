@@ -1,8 +1,3 @@
-// TODO:
-//   [ ] remove square event listeners so can't mark during win animation(?) might be ok...
-//   [x] make visual turn indicator
-//   [ ] START AT BEGINNING OF GAME PROCESS and code each step before going to next
-
 let game;
 let controller;
 let playerOne;
@@ -170,6 +165,10 @@ game = (() => {
   // need getter function for display to properly read this value
   const doesPlayerOneStart = () => playerOneStarts;
 
+  const isPlayerOneTurn = () => {
+    return playerOneStarts && turn === "X" || !playerOneStarts && turn === "O";
+  };
+
   const getBoard = () => board;
   // needs argument for use in minimax function
   const getFreeSquares = (board) => {
@@ -228,7 +227,7 @@ game = (() => {
     if (isWin(board)) {
       controller.clickToContinue();
       // ...announce it and give a point to the appropriate player.
-      if (playerOneStarts && turn === "X" || !playerOneStarts && turn === "O") {
+      if (isPlayerOneTurn()) {
         playerOne.win();
         display.showWin(getWinningSquares(board), playerOne.getName());
       } else {
@@ -241,6 +240,12 @@ game = (() => {
     } else { // If there was no win and empty squares remain...
       turn = turn === "X" ? "O" : "X";
       display.changeTurn(); // ...just change turns.
+      // Then make the CPU move if in single-player mode
+      if (mode === "single") {
+        if (!isPlayerOneTurn()) {
+          setTimeout(makeCpuPlay, 500);
+        }
+      }
     }
   };
 
@@ -277,6 +282,9 @@ game = (() => {
     playerOneStarts = !playerOneStarts;
     resetBoard();
     display.changeScreen(e);
+    if (mode === "single" && !isPlayerOneTurn()) { // make CPU move if it starts the round
+      setTimeout(makeCpuPlay, 1);
+    }
   };
 
   const reset = e => {
@@ -295,14 +303,14 @@ game = (() => {
     const freeSquares = getFreeSquares(newBoard);
     const humanMark = getHumanMark();
     const cpuMark = getCpuMark();
-
+    
     // For each possible move, if there is a win for the cpu, score is positive
-    if (isWin(newBoard) && getWinningSquares(newBoard)[0] === cpuMark) {
+    if (isWin(newBoard) && newBoard[getWinningSquares(newBoard)[0]] === cpuMark) {
       return { score: 1 };
       // If there's a win for the human, score is negative
     } else if (isWin(newBoard)) {
       return { score: -1 };
-      // If there is no win and no free spaces left, score is neutral
+      // If there is no win and no free spaces left (i.e. a draw), score is neutral
     } else if (freeSquares.length === 0) {
       return { score: 0 };
     }
@@ -331,7 +339,7 @@ game = (() => {
     let bestMove;
 
     if (mark === cpuMark) {
-      let bestScore = -10000;
+      let bestScore = -Infinity;
       for (let i = 0; i < moves.length; i++) {
         if (moves[i].score > bestScore) {
           bestScore = moves[i].score;
@@ -339,7 +347,7 @@ game = (() => {
         }
       }
     } else {
-      let bestScore = 10000;
+      let bestScore = Infinity;
       for (let i = 0; i < moves.length; i++) {
         if (moves[i].score < bestScore) {
           bestScore = moves[i].score;
@@ -351,6 +359,23 @@ game = (() => {
     return moves[bestMove];
   };
 
+  const makeCpuPlay = () => {
+    const squareInputs = Array.from(document.getElementsByClassName("square"));
+    const randomIndex = 
+      getFreeSquares(board)[Math.floor(Math.random() * getFreeSquares(board).length)];
+    const bestIndex = minimax(board, getCpuMark()).index;
+    const randomMoveOdds = Math.floor(Math.random() * 101);
+    // cpu picks best move 50% of time on easy, 75% on medium, 100% on hard
+    const bestMoveOdds = difficulty === "easy" ? 50 : difficulty === "medium" ? 75 : 100;
+
+    // Pick a random square if starting a new round or randomMoveOdds is highest...
+    if (getFreeSquares(board).length === 9 || randomMoveOdds > bestMoveOdds) {
+      squareInputs[randomIndex].click();
+    } else { // ...otherwise go for the win!
+      squareInputs[bestIndex].click();
+    }
+  };
+
   document.addEventListener("setMode", setMode);
   document.addEventListener("setDifficulty", setDifficulty);
   document.addEventListener("start", start);
@@ -360,11 +385,7 @@ game = (() => {
 
   return {
     getBoard,
-    processTurn,
-    doesPlayerOneStart,
-    minimax,
-    getHumanMark,
-    getCpuMark
+    doesPlayerOneStart
   };
 })();
 
@@ -443,7 +464,6 @@ controller = (() => {
 
   return {
     getNames,
-    clickToContinue,
-    squares
+    clickToContinue
   };
 })();
